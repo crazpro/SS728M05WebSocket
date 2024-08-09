@@ -1,0 +1,74 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+    <title>神思SS728型读卡演示网页</title>
+    <script type="text/javascript">	
+		
+		if(!window.WebSocket)
+		{
+			alert("该版本浏览器不支持WebSocket");
+		}
+		var websocket = new WebSocket("ws://127.0.0.1:6932/");
+			websocket.onopen = function(evt) 
+			{ 
+            	//onOpen(evt) 
+				
+        	}; 
+        	websocket.onclose = function(evt) 
+			{ 
+            	//onClose(evt) 
+        	}; 
+        	websocket.onmessage = function(evt) 
+			{ 
+            	//onMessage(evt) 
+				document.getElementById("cardinfo").value = evt.data;
+				//websocket.close();
+        	}; 
+        	websocket.onerror = function(evt) 
+			{ 
+            	//onError(evt) 
+				websocket.close();
+        	}; 			
+		function opendevice()
+		{	
+			websocket.send("{ \"MethodName\": \"OpenDevice\" }");
+		}
+		function closedevice()
+		{	
+			websocket.send("{ \"MethodName\": \"CloseDevice\" }");
+		}
+		function readM1card()
+		{	
+			websocket.send("{ \"MethodName\": \"ReadM1Card\",  \"Methoddata\":  {    \"Adr\": 1,    \"PassWord\": \"FFFFFFFFFFFF\"  } }");
+		}
+		function readSSSEcard()
+		{	
+			websocket.send("{ \"MethodName\": \"ReadSSSECard\" }");
+		}
+		function readIDcard()
+		{	
+			websocket.send("{ \"MethodName\": \"ReadIDCard\"}");
+		}
+		function readBankcard()
+		{	
+			websocket.send("{ \"MethodName\": \"ReadBankCard\"}");
+		}
+		function errortest()
+		{	
+			websocket.send("{ \"MethodName\": \"test\"}");
+		}
+    </script>
+</head>
+<body>
+<label>
+	<input type="button" name="opendevice" id="opendevice" value="打开设备" onClick="opendevice()">
+	<input type="button" name="closedevice" id="closedevice" value="关闭设备" onClick="closedevice()">
+	<input type="button" name="readM1card" id="readM1card" value="读m1卡" onClick="readM1card()">
+	<input type="button" name="readSSSEcard" id="readSSSEcard" value="读社保卡" onClick="readSSSEcard()">
+	<input type="button" name="readIDcard" id="readIDcard" value="读二代证" onClick="readIDcard()">
+	<input type="button" name="readBankcard" id="readIDcard" value="读银行卡" onClick="readIDcard()">
+	<input type="button" name="errortest" id="errortest" value="错误测试" onClick="errortest()">
+	<textarea name="cardinfo" cols="100" rows="10" id="cardinfo"></textarea>
+</label>
+</body>
+</html>
